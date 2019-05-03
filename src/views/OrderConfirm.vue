@@ -162,7 +162,12 @@
           orderTotal: this.orderTotal,
           addressId
         }).then(res => {
-          console.log(res);
+          // console.log(res);
+          res = res.data;
+          let orderId = res.result.orderId;
+          this.$router.push({path: '/orderSuccess', query: {
+            orderId
+          }})
         })
       }
     }
