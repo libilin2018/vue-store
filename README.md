@@ -1,5 +1,5 @@
 # imoocmall
-new
+new one
 > Imooc Mall 
 
 ## Build Setup
