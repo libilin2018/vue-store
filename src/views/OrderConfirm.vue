@@ -108,10 +108,10 @@
 
         <div class="order-foot-wrap">
           <div class="prev-btn-wrap">
-            <a class="btn btn--m">Previous</a>
+            <router-link class="btn btn--m" to="/address">Previous</router-link>
           </div>
           <div class="next-btn-wrap">
-            <button class="btn btn--m btn--red">Proceed to payment</button>
+            <button class="btn btn--m btn--red" @click="handlePayment">Proceed to payment</button>
           </div>
         </div>
       </div>
@@ -154,6 +154,15 @@
             this.subTotals += item.salePrice*item.productNum;
           })
           this.orderTotal = this.subTotals - this.discount;
+        })
+      },
+      handlePayment () {
+        let addressId = this.$route.query.addressId;
+        axios.post('users/payMent', {
+          orderTotal: this.orderTotal,
+          addressId
+        }).then(res => {
+          console.log(res);
         })
       }
     }
