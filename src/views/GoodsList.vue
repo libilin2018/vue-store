@@ -243,7 +243,8 @@ export default {
         .then(res => {
           res = res.data;
           if (res.status == '0') {
-            this.cartModelShow = true
+            this.cartModelShow = true;
+            this.$store.commit('updateCartCount', 1);
           } else {
             this.banModelShow = true;
           }
