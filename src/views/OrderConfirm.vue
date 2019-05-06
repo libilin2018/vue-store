@@ -153,7 +153,7 @@
           this.cartList.forEach(item => {
             this.subTotals += item.salePrice*item.productNum;
           })
-          this.orderTotal = this.subTotals - this.discount;
+          this.orderTotal = this.subTotals - this.discount > 0 ? this.subTotals - this.discount : 0;
         })
       },
       handlePayment () {
