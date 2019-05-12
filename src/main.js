@@ -53,7 +53,7 @@ new Vue({
       axios.get("users/checkLogin").then(res=> {
         var res = res.data;
         if (res.status == "0") {
-          this.$store.commit("updateUserInfo", res.result);
+          this.$store.commit("updateUserInfo", res.result.userName);
         }else{
           if(this.$route.path!="/goods"){
             this.$router.push("/goods");

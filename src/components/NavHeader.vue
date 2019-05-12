@@ -20,7 +20,7 @@
             <a href="javascript:void(0)" class="navbar-link" v-if="!nickName" @click="openLoginModel">Login</a>
             <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="handleLogout">Logout</a>
             <div class="navbar-cart-container">
-              <span class="navbar-cart-count"></span>
+              <span class="navbar-cart-count" v-if="cartCount > 0">{{cartCount}}</span>
               <a class="navbar-link navbar-cart-link" href="/#/cart">
                 <svg class="navbar-cart-logo">
                   <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
@@ -64,6 +64,7 @@
 </template>
 <script>
 import axios from "axios";
+import { mapState } from 'vuex'
 export default {
     name: 'NavHeader',
     data () {
@@ -73,12 +74,20 @@ export default {
         userName: '',
         userPwd: '',
         errorTip: false,
-        nickName: '',
         errorText: ''
       }
     },
     mounted () {
       this.checkLogin();
+    },
+    computed: {
+      ...mapState(['nickName', 'cartCount'])
+      // nickName () {
+      //   return this.$store.state.nickName;
+      // },
+      // cartCount () {
+      //   return this.$store.state.cartCount;
+      // }
     },
     methods: {
       handleLogin () {
@@ -93,13 +102,10 @@ export default {
         }).then(res => {
           res = res.data;
           if (res.status == '0') {
-            this.nickName = res.result.userName;
             this.errorTip = false;  
             this.closeOverlay();
-            if (window.location.hash == "#/cart") {
-              // history.go(0)
-              window.location.reload(false);
-            }
+            this.$store.commit('updateUserInfo', res.result.userName);
+            this.getCartCount();
           } else {
             this.errorText = res.msg;
             this.errorTip = true;
@@ -110,7 +116,13 @@ export default {
         axios.get('/users/checklogin').then(res => {
           res = res.data;
           if (res.status == "0") {
-            this.nickName = res.result.userName;
+            // this.nickName = res.result.userName;
+            this.$store.commit('updateUserInfo', res.result.userName);
+            this.getCartCount();
+          } else{
+            if(this.$route.path!="/goods"){
+              this.$router.push("/goods");
+            }
           }
         })
       },
@@ -126,11 +138,18 @@ export default {
         axios.post('users/logout').then(res => {
           res = res.data;
           if (res.status == '0') {
-            this.nickName = '';
-            if (window.location.hash != "#/") {
-              // history.go(0)
-              window.location.reload(false);
-            }
+            this.$store.commit('updateUserInfo', '');
+            this.getCartCount();
+          }
+        })
+      },
+      getCartCount () {
+        axios.get('users/cartCount').then(res => {
+          res = res.data;
+          if (res.status == 0) {
+            this.$store.state.cartCount = res.result;
+          } else {
+            this.$store.state.cartCount = 0;
           }
         })
       }

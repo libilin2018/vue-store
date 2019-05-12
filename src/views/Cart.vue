@@ -101,7 +101,7 @@
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
-                    <a href="javascript:;" class="item-edit-btn" @click="handleConfirmDel(item.productId)">
+                    <a href="javascript:;" class="item-edit-btn" @click="handleConfirmDel(item)">
                       <svg class="icon icon-del">
                         <use xlink:href="#icon-del"></use>
                       </svg>
@@ -159,7 +159,7 @@ export default {
     return {
       cartList: [],
       modelConfirm: false,
-      productId: '',
+      delItem: {},
     }
   },
   computed: {
@@ -203,12 +203,12 @@ export default {
         this.cartList = res.result;
       })
     },
-    handleConfirmDel (id) {
+    handleConfirmDel (item) {
       this.modelConfirm = true;
-      this.productId = id;
+      this.delItem = item;
     },
     handleDelCart () {
-      let productId = this.productId;
+      let productId = this.delItem.productId;
       axios.post('/users/cartdel', {
         productId
       }).then(res => {
@@ -216,11 +216,12 @@ export default {
         if (res.status == "0") {
           this.modelConfirm = false;
           this.refreshList();
+          this.$store.commit('updateCartCount', -this.delItem.productNum);
         }
       })
     },
     refreshList () {
-      let productId = this.productId,
+      let productId = this.delItem.productId,
           list = this.cartList;
       for (let i=0; i<list.length; i++) {
         if (list[i].productId == productId) {
@@ -232,9 +233,11 @@ export default {
     editCart (type, item) {
       if (type == "add") {
         item.productNum++;
+        this.$store.commit('updateCartCount', 1);
       } else if (type == "mini") {
         if (item.productNum <= 1) return;
         item.productNum--;
+        this.$store.commit('updateCartCount', -1);
       } else {
         item.checked = item.checked == '1' ? '0' : '1';
       }
