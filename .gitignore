@@ -3,6 +3,7 @@ node_modules
 demo/
 mock/
 dist/
+vue-store/
 test/
 npm-debug.log*
 yarn-debug.log*
