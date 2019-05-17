@@ -145,7 +145,7 @@
     },
     methods: {
       init () {
-        axios.get('users/cartlist').then(res => {
+        axios.get('/users/cartlist').then(res => {
           res = res.data;
           this.cartList = res.result.filter(item => {
             return item.checked == '1';
