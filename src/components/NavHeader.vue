@@ -12,7 +12,6 @@
         <div class="navbar-left-container">
           <a href="/">
             <img class="navbar-brand-logo" src="static/logo-icon.png"></a>
-            <p class="navbar-logo-txt">商城</p>
         </div>
         <div class="navbar-right-container" style="display: flex;">
           <div class="navbar-menu-container">
