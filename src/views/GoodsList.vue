@@ -111,7 +111,8 @@ import axios from "axios";
 import NavHeader from "@/components/NavHeader";
 import NavBread from "@/components/NavBread";
 import NavFooter from "@/components/NavFooter";
-import CommonModel from '@/components/CommonModel'
+import CommonModel from '@/components/CommonModel';
+import getCookie from '@/util/cookies.js';
 export default {
   data() {
     return {
@@ -236,9 +237,11 @@ export default {
       this.loginShow = false;
     },
     handleAddCart(id) {
+      let userId = getCookie('userId');
       axios
         .post("/goods/addCart", {
-          productId: id
+          productId: id,
+          userId
         })
         .then(res => {
           res = res.data;

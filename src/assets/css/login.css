@@ -61,6 +61,9 @@ a {
 .navbar-link {
     padding-left: 15px;
 }
+.navbar-link:hover {
+    color: #eb767d;
+}
 
 .navbar-cart-container {
     position: relative;
@@ -162,6 +165,10 @@ a {
     font-size: 16px;
     text-align: center;
     transition: all .3s ease-out;
+}
+.md-content .btn-login.disable {
+    pointer-events: none;
+    opacity: .5;
 }
 
 .btn-login:hover {

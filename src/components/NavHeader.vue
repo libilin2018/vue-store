@@ -17,9 +17,10 @@
           <div class="navbar-menu-container">
             <!--<a href="/" class="navbar-link">我的账户</a>-->
             <span class="navbar-link" v-text="nickName" v-if="nickName"></span>
-            <a href="javascript:void(0)" class="navbar-link" v-if="!nickName" @click="openLoginModel">Login</a>
-            <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="handleLogout">Logout</a>
-            <div class="navbar-cart-container">
+            <a href="javascript:void(0)" class="navbar-link" v-if="!nickName" @click="openLoginModel">登录</a>
+            <a href="javascript:void(0)" class="navbar-link" v-if="!nickName" @click="openRegistModel">注册</a>
+            <a href="javascript:void(0)" class="navbar-link" v-if="nickName" @click="handleLogout">退出登录</a>
+            <div class="navbar-cart-container" v-if="nickName">
               <span class="navbar-cart-count" v-if="cartCount > 0">{{cartCount}}</span>
               <a class="navbar-link navbar-cart-link" href="/#/cart">
                 <svg class="navbar-cart-logo">
@@ -60,6 +61,34 @@
           </div>
         </div>
     </div>
+    <div class="md-modal modal-msg md-modal-transition" :class="{'md-show': registShow}">
+        <div class="md-modal-inner">
+          <div class="md-top">
+            <div class="md-title">欢迎注册</div>
+            <button class="md-close" @click="closeOverlay">Close</button>
+          </div>
+          <div class="md-content">
+            <div class="confirm-tips">
+              <div class="error-wrap">
+                <span class="error error-show" v-show="errorTip">{{errorText}}</span>
+              </div>
+              <ul>
+                <li class="regi_form_input">
+                  <i class="icon IconPeople"></i>
+                  <input type="text" tabindex="1" name="loginname" v-model="userName" class="regi_login_input">
+                </li>
+                <li class="regi_form_input">
+                  <i class="icon IconPwd"></i>
+                  <input type="password" tabindex="2" name="password" v-model="userPwd" class="regi_login_input"  @keyup.enter="handleRegist">
+                </li>
+              </ul>
+            </div>
+            <div class="login-wrap">
+              <a href="javascript:;" class="btn-login" @click="handleRegist">注册</a>
+            </div>
+          </div>
+        </div>
+    </div>
   </div>
 </template>
 <script>
@@ -71,6 +100,7 @@ export default {
       return {
         overlayShow: false,
         loginShow: false,
+        registShow: false,
         userName: '',
         userPwd: '',
         errorTip: false,
@@ -112,6 +142,31 @@ export default {
           }
         })
       },
+      handleRegist () {
+        if (!this.userName || !this.userPwd) {
+          this.errorText = '内容不能为空';
+          this.errorTip = true;
+          return;
+        }
+        let btn =  document.getElementsByClassName('btn-login')[1];
+        btn.className = "btn-login disable";
+        axios.post('/users/register', {
+          userName: this.userName,
+          userPwd: this.userPwd
+        }).then(res => {
+          res = res.data;
+          if (res.status == "0") {
+            this.errorTip = false;  
+            this.closeOverlay();
+            this.$store.commit('updateUserInfo', res.result.userName);
+            this.getCartCount();
+          } else {
+            this.errorText = res.msg;
+            this.errorTip = true;
+          }
+          btn.className = "btn-login";
+        })
+      },
       checkLogin () {
         axios.get('/users/checklogin').then(res => {
           res = res.data;
@@ -130,9 +185,17 @@ export default {
         this.loginShow = true;
         this.overlayShow = true;
       },
+      openRegistModel () {
+        this.registShow = true;
+        this.overlayShow = true;
+      },
       closeOverlay () {
         this.loginShow = false;
+        this.registShow = false;
         this.overlayShow = false;
+        this.userName = '';
+        this.userPwd = '';
+        this.errorTip = '';
       },
       handleLogout () {
         axios.post('users/logout').then(res => {

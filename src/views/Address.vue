@@ -76,7 +76,7 @@
                     </div>
                     <div v-if="item.isDefault" class="addr-opration addr-default">Default address</div>
                   </li>
-                  <li class="addr-new">
+                  <li class="addr-new" @click="handleAddress">
                     <div class="add-new-inner">
                       <i class="icon-add">
                         <svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg>
