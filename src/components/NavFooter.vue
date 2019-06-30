@@ -3,13 +3,13 @@
       <div class="footer__wrap">
         <div class="footer__secondary">
           <div class="footer__inner">
-            <div class="footer__region">
+            <!-- <div class="footer__region">
               <span>Region</span>
               <select class="footer__region__select">
                 <option value="en-US">English</option>
                 <option value="zh-CN">简体中文</option>
               </select>
-            </div>
+            </div> -->
             <div class="footer__secondary__nav">
               <span>Copyright © 2019 store.sharelab.club All Rights Reserved.</span>
               <a href="http://blog.sharelab.club">

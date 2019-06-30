@@ -3,10 +3,14 @@
         <div class="md-modal modal-msg md-modal-transition" :class="{'md-show': modelShow}">
             <div class="md-modal-inner">
             <div class="md-top">
+                <slot name="title"></slot>
                 <button class="md-close" @click="closeModel">Close</button>
             </div>
             <div class="md-content">
                 <div class="confirm-tips">
+                    <div class="error-wrap">
+                        <slot name="errorTip"></slot>
+                    </div>
                     <slot name="message"></slot>
                 </div>
                 <div class="btn-wrap">

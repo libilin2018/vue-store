@@ -61,6 +61,7 @@ a {
 .navbar-link {
     padding-left: 15px;
 }
+
 .navbar-link:hover {
     color: #eb767d;
 }
@@ -125,6 +126,18 @@ a {
     background-position: -198px 3px;
 }
 
+.regi_form_input .IconAddress {
+    background-image: url("/static/address.png");
+    background-size: 90%;
+    background-position: 0 2px;
+}
+
+.regi_form_input .IconTel {
+    background-image: url("/static/tel.png");
+    background-size: 90%;
+    background-position: 0 2px;
+}
+
 .regi_form_input .regi_login_input {
     position: absolute;
     left: 45px;
@@ -166,6 +179,7 @@ a {
     text-align: center;
     transition: all .3s ease-out;
 }
+
 .md-content .btn-login.disable {
     pointer-events: none;
     opacity: .5;

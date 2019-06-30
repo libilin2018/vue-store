@@ -11,15 +11,15 @@
     </symbol>
     <nav-header></nav-header>
     <nav-bread>
-      <span>Goods</span>
+      <span>商品</span>
     </nav-bread>
     <div class="accessory-result-page accessory-page">
       <div class="container">
         <div class="filter-nav">
-          <span class="sortby">Sort by:</span>
-          <a href="javascript:void(0)" class="default cur" @click="handleSort(1)">Default</a>
+          <span class="sortby">排序：</span>
+          <a href="javascript:void(0)" class="default cur" @click="handleSort(1)">默认</a>
           <a href="javascript:void(0)" class="price" @click="handleSort(0)">
-            Price
+            价格
             <svg class="icon-arrow-short"  :class="{'up-arrow': this.sortFlag == '1' ? true : false}">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-arrow-short"></use>
             </svg>
@@ -30,13 +30,13 @@
           <!-- filter -->
           <div class="filter stopPop" id="filter" :class="{'filterby-show': filterBy}">
             <dl class="filter-price">
-              <dt>Price:</dt>
+              <dt>筛选：</dt>
               <dd>
                 <a
                   href="javascript:void(0)"
                   :class="{'cur': priceChecked == 'all'}"
                   @click="handlePriceRange('all')"
-                >All</a>
+                >全部</a>
               </dd>
               <dd v-for="(item, index) in priceRange" :key="index" @click="handlePriceRange(index)">
                 <a
@@ -78,7 +78,7 @@
                 infinite-scroll-throttle-delay="500"
                 v-show="loading"
               >
-                <img src="static/loading-svg/loading-spinning-bubbles.svg" alt>
+                <img src="static/loading-svg/loading-bars.svg" alt>
               </div>
             </div>
           </div>
@@ -237,11 +237,9 @@ export default {
       this.loginShow = false;
     },
     handleAddCart(id) {
-      let userId = getCookie('userId');
       axios
         .post("/goods/addCart", {
-          productId: id,
-          userId
+          productId: id
         })
         .then(res => {
           res = res.data;

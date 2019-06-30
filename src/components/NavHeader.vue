@@ -156,9 +156,7 @@ export default {
         }).then(res => {
           res = res.data;
           if (res.status == "0") {
-            this.errorTip = false;  
-            this.closeOverlay();
-            this.$store.commit('updateUserInfo', res.result.userName);
+            this.handleLogin();
             this.getCartCount();
           } else {
             this.errorText = res.msg;

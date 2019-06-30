@@ -2,7 +2,7 @@
     <div>
       <nav-header></nav-header>
       <nav-bread>
-        <span>Address</span>
+        <span>选择地址</span>
       </nav-bread>
       <div class="checkout-page">
         <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -46,16 +46,16 @@
             <!-- process step -->
             <div class="check-step">
               <ul>
-                <li class="cur"><span>Confirm</span> address</li>
-                <li><span>View your</span> order</li>
-                <li><span>Make</span> payment</li>
-                <li><span>Order</span> confirmation</li>
+                <li class="cur">选择地址</li>
+                <li>查看订单</li>
+                <li>订单确认</li>
+                <li>付款成功</li>
               </ul>
             </div>
 
             <!-- address list -->
             <div class="page-title-normal checkout-title">
-              <h2><span>Shipping address</span></h2>
+              <h2><span>地址列表</span></h2>
             </div>
             <div class="addr-list-wrap">
               <div class="addr-list">
@@ -72,16 +72,16 @@
                       </a>
                     </div>
                     <div class="addr-opration addr-set-default" v-show="!item.isDefault" >
-                      <a href="javascript:;" class="addr-set-default-btn" @click="handleSetDefault(item.addressId)"><i>Set default</i></a>
+                      <a href="javascript:;" class="addr-set-default-btn" @click="handleSetDefault(item.addressId)"><i>设置默认地址</i></a>
                     </div>
-                    <div v-if="item.isDefault" class="addr-opration addr-default">Default address</div>
+                    <div v-if="item.isDefault" class="addr-opration addr-default">默认地址</div>
                   </li>
-                  <li class="addr-new" @click="handleAddress">
+                  <li class="addr-new" @click="addNewAddress">
                     <div class="add-new-inner">
                       <i class="icon-add">
                         <svg class="icon icon-add"><use xlink:href="#icon-add"></use></svg>
                       </i>
-                      <p>Add new address</p>
+                      <p>添加新地址</p>
                     </div>
                   </li>
                 </ul>
@@ -99,23 +99,23 @@
 
             <!-- shipping method-->
             <div class="page-title-normal checkout-title">
-              <h2><span>Shipping method</span></h2>
+              <h2><span>送货方式</span></h2>
             </div>
             <div class="shipping-method-wrap">
               <div class="shipping-method">
                 <ul>
                   <li class="check">
-                    <div class="name">Standard shipping</div>
-                    <div class="price">Free</div>
+                    <div class="name">顺丰速运</div>
+                    <div class="price">免邮</div>
                     <div class="shipping-tips">
-                      <p>Once shipped，Order should arrive in the destination in 1-7 business days</p>
+                      <p>订单确认后，快递将在1-7个工作日内到达您手上</p>
                     </div>
                   </li>
                 </ul>
               </div>
             </div>
             <div class="next-btn-wrap">
-              <router-link class="btn btn--m btn--red" :to="{path: '/orderConfirm', query: {addressId: selectAddressId}}">Next</router-link>
+              <router-link class="btn btn--m btn--red" :to="{path: '/orderConfirm', query: {addressId: selectAddressId}}">下一步</router-link>
             </div>
           </div>
         </div>
@@ -123,7 +123,27 @@
       <common-model :modelShow="modelShow" @closeModel="modelShow = false">
         <p slot="message">确定删除该地址吗？</p>
         <a href="javascript:;" class="btn btn--m" slot="btnGroup" @click="handleDelAddress">确定</a>
-        <a href="javascript:;" class="btn btn--m" slot="btnGroup" @click="modelShow = false">取消</a>
+        <a href="javascript:;" class="btn btn--m" slot="btnGroup" @click="handleCloseBtn">取消</a>
+      </common-model>
+      <common-model :modelShow="addModelShow" @closeModel="addModelShow = false">
+        <div class="md-title" slot="title">请填写地址信息</div>
+        <span class="error error-show" slot="errorTip" v-show="errorTipShow">内容不能为空</span>
+        <ul slot="message">
+          <li class="regi_form_input">
+            <i class="icon IconPeople"></i>
+            <input type="text" tabindex="1" name="loginname" v-model="addressName" class="regi_login_input">
+          </li>
+          <li class="regi_form_input">
+            <i class="icon IconAddress"></i>
+            <input type="text" tabindex="2" name="password" v-model="addressLocate" class="regi_login_input" >
+          </li>
+          <li class="regi_form_input">
+            <i class="icon IconTel"></i>
+            <input type="number" tabindex="3" name="password" v-model="addressTel" class="regi_login_input" >
+          </li>
+        </ul>
+        <a href="javascript:;" class="btn btn--m" slot="btnGroup" @click="handleAddAddress">确定</a>
+        <a href="javascript:;" class="btn btn--m" slot="btnGroup" @click="handleCloseBtn">取消</a>
       </common-model>
       <nav-footer></nav-footer>
     </div>
@@ -141,8 +161,13 @@ import CommonModel from '@/components/CommonModel'
             limit: 3,
             currentAddress: 0,
             modelShow: false,
+            addModelShow: false,
             addressId: '',
-            selectAddressId: ''
+            selectAddressId: '',
+            addressName: '',
+            addressLocate: '',
+            addressTel: '',
+            errorTipShow: false
           }
       },
       components: {
@@ -219,6 +244,32 @@ import CommonModel from '@/components/CommonModel'
             addressId
           }).then();
           this.modelShow = false;
+        },
+        handleCloseBtn () {
+          this.modelShow = false;
+          this.addModelShow = false;
+          this.errorTipShow = false;
+        },
+        addNewAddress () {
+          this.addModelShow = true;
+        },
+        handleAddAddress () {
+          let userName = this.addressName,
+              streetName = this.addressLocate,
+              tel = this.addressTel;
+          if (!userName || !streetName || !tel) {
+            this.errorTipShow = true;
+            return;
+          }
+          this.errorTipShow = false;
+          axios.post('/users/addAddress', {
+            userName,
+            streetName,
+            tel
+          }).then(res => {
+            this.init();
+            this.addModelShow = false;
+          })
         }
       }
   }
