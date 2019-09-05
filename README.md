@@ -1,5 +1,3 @@
-# imoocmall
-one
 > vue-store
 
 结合`node.js` `Vue.js` `MongoDB`完成的一个简易微商城平台
